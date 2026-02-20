@@ -1,9 +1,10 @@
+require("dotenv").config();
+
 const express = require("express");
+const mongoose = require("mongoose");
 
 const app = express();
 
-const mongoose = require("mongoose");
-require("dotenv").config();
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("Connexion à MongoDB réussie !"))
@@ -32,7 +33,7 @@ app.post("/api/books", (req, res, next) => {
 });
 
 app.get("/api/books", (req, res, next) => {
-  const book = [
+  const books = [
     {
       userId: "qsomihvqios",
       _id: "1",
@@ -66,7 +67,7 @@ app.get("/api/books", (req, res, next) => {
       averageRating: 4,
     },
   ];
-  res.status(200).json(book);
+  res.status(200).json(books);
 });
 
 module.exports = app;
