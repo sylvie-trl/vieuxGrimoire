@@ -3,13 +3,14 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 
-const app = express();
+const Book = require("./models/Book");
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch((error) => console.log("Connexion à MongoDB échouée !", error));
 
+const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -26,48 +27,26 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/books", (req, res, next) => {
-  console.log(req.body);
-  res.status(201).json({
-    message: "Livre enregistré !",
+  this.delete.req.body._id;
+  const book = new Book({
+    ...req.body,
   });
+  book
+    .save()
+    .then(() => res.status(201).json({ message: "Livre enregistré !" }))
+    .catch((error) => res.status(400).json({ error }));
+});
+
+app.get("/api/books/:id", (req, res, next) => {
+  Book.findOne({ _id: req.params.id })
+    .then((book) => res.status(200).json(book))
+    .catch((error) => res.status(404).json({ error }));
 });
 
 app.get("/api/books", (req, res, next) => {
-  const books = [
-    {
-      userId: "qsomihvqios",
-      _id: "1",
-      title: "Milwaukee Mission",
-      author: "Elder Cooper",
-      imageURL: "/images/image-book-milwaukee-mission.jpg",
-      year: 2021,
-      genre: "Policier",
-      ratings: [
-        {
-          userId: "qsomihvqios",
-          grade: 3,
-        },
-      ],
-      averageRating: 3,
-    },
-    {
-      userId: "azezafrefze",
-      _id: "2",
-      title: "Book for Esther",
-      author: "Alabaster",
-      imageURL: "/images/image-book-esther.jpg",
-      year: 2022,
-      genre: "Paysage",
-      ratings: [
-        {
-          userId: "azezafrefze",
-          grade: 4,
-        },
-      ],
-      averageRating: 4,
-    },
-  ];
-  res.status(200).json(books);
+  Book.find()
+    .then((books) => res.status(200).json(books))
+    .catch((error) => res.status(400).json({ error }));
 });
 
 module.exports = app;
