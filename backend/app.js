@@ -28,8 +28,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/images", express.static(require("path").join(__dirname, "images")));
 app.use("/api/books", booksRoutes);
 app.use("/api/auth", userRoutes);
-app.use("/images", express.static(require("path").join(__dirname, "images")));
 
 module.exports = app;
