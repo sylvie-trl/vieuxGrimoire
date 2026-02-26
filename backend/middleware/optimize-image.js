@@ -3,6 +3,8 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = (req, res, next) => {
+  console.log("FILE:", req.file); //pour debug
+
   if (!req.file) return next();
 
   const filename = `book_${Date.now()}.webp`;
