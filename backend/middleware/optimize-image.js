@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   }
 
   sharp(req.file.buffer)
-    .resize(800)
+    .resize({ width: 800 })
     .webp({ quality: 80 })
     .toFile(filepath)
     .then(() => {
